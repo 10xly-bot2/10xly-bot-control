@@ -22,7 +22,7 @@
 # For more information: https://github.github.com/gh-aw/introduction/overview/
 #
 #
-# gh-aw-metadata: {"schema_version":"v2","frontmatter_hash":"021ab2e4bc2f3536174372178fceb132f6bb3cd961bf30392128ef49670980f7","compiler_version":"v0.58.3","strict":true}
+# gh-aw-metadata: {"schema_version":"v2","frontmatter_hash":"9ae834a57a63b02482d0dde866b219df16ab5d575187721ae9b16402315c879b","compiler_version":"v0.58.3","strict":true}
 
 name: "10xly-bot2 Personality & Mission"
 "on":
@@ -840,6 +840,8 @@ jobs:
           sudo -E awf --env-all --container-workdir "${GITHUB_WORKSPACE}" --allow-domains "*.googleapis.com,api.snapcraft.io,archive.ubuntu.com,azure.archive.ubuntu.com,crl.geotrust.com,crl.globalsign.com,crl.identrust.com,crl.sectigo.com,crl.thawte.com,crl.usertrust.com,crl.verisign.com,crl3.digicert.com,crl4.digicert.com,crls.ssl.com,generativelanguage.googleapis.com,github.com,host.docker.internal,json-schema.org,json.schemastore.org,keyserver.ubuntu.com,ocsp.digicert.com,ocsp.geotrust.com,ocsp.globalsign.com,ocsp.identrust.com,ocsp.sectigo.com,ocsp.ssl.com,ocsp.thawte.com,ocsp.usertrust.com,ocsp.verisign.com,packagecloud.io,packages.cloud.google.com,packages.microsoft.com,ppa.launchpad.net,raw.githubusercontent.com,registry.npmjs.org,s.symcb.com,s.symcd.com,security.ubuntu.com,ts-crl.ws.symantec.com,ts-ocsp.ws.symantec.com" --log-level info --proxy-logs-dir /tmp/gh-aw/sandbox/firewall/logs --enable-host-access --image-tag 0.24.1 --skip-pull --enable-api-proxy \
             -- /bin/bash -c 'export PATH="$(find /opt/hostedtoolcache -maxdepth 4 -type d -name bin 2>/dev/null | tr '\''\n'\'' '\'':'\'')$PATH"; [ -n "$GOROOT" ] && export PATH="$GOROOT/bin:$PATH" || true && gemini --yolo --output-format stream-json --prompt "$(cat /tmp/gh-aw/aw-prompts/prompt.txt)"' 2>&1 | tee -a /tmp/gh-aw/agent-stdio.log
         env:
+          COMMENT_BODY: ${{ inputs.comment_body }}
+          COMMENT_ID: ${{ inputs.comment_id }}
           DEBUG: gemini-cli:*
           GEMINI_API_BASE_URL: http://host.docker.internal:10003
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -856,6 +858,9 @@ jobs:
           GIT_AUTHOR_NAME: github-actions[bot]
           GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
           GIT_COMMITTER_NAME: github-actions[bot]
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
+          OWNER: ${{ inputs.owner }}
+          REPO: ${{ inputs.repo }}
       - name: Configure Git credentials
         env:
           REPO_NAME: ${{ github.repository }}
@@ -1027,6 +1032,8 @@ jobs:
           sudo -E awf --env-all --container-workdir "${GITHUB_WORKSPACE}" --allow-domains "*.googleapis.com,generativelanguage.googleapis.com,github.com,host.docker.internal,raw.githubusercontent.com,registry.npmjs.org" --log-level info --proxy-logs-dir /tmp/gh-aw/sandbox/firewall/logs --enable-host-access --image-tag 0.24.1 --skip-pull --enable-api-proxy \
             -- /bin/bash -c 'export PATH="$(find /opt/hostedtoolcache -maxdepth 4 -type d -name bin 2>/dev/null | tr '\''\n'\'' '\'':'\'')$PATH"; [ -n "$GOROOT" ] && export PATH="$GOROOT/bin:$PATH" || true && gemini --yolo --output-format stream-json --prompt "$(cat /tmp/gh-aw/aw-prompts/prompt.txt)"' 2>&1 | tee -a /tmp/gh-aw/threat-detection/detection.log
         env:
+          COMMENT_BODY: ${{ inputs.comment_body }}
+          COMMENT_ID: ${{ inputs.comment_id }}
           DEBUG: gemini-cli:*
           GEMINI_API_BASE_URL: http://host.docker.internal:10003
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -1041,6 +1048,9 @@ jobs:
           GIT_AUTHOR_NAME: github-actions[bot]
           GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
           GIT_COMMITTER_NAME: github-actions[bot]
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
+          OWNER: ${{ inputs.owner }}
+          REPO: ${{ inputs.repo }}
       - name: Parse threat detection results
         id: parse_detection_results
         if: always() && steps.detection_guard.outputs.run_detection == 'true'

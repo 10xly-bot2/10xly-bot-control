@@ -15,11 +15,19 @@ on:
       comment_body:
         description: Comment body
 
+
 engine:
   id: gemini
   version: "0.31.0"
   env:
     GEMINI_MODEL: "gemini-3.1-flash-lite-preview"
+
+    # pass mention context directly into the agent
+    ISSUE_NUMBER: ${{ inputs.issue_number }}
+    COMMENT_ID: ${{ inputs.comment_id }}
+    REPO: ${{ inputs.repo }}
+    OWNER: ${{ inputs.owner }}
+    COMMENT_BODY: ${{ inputs.comment_body }}
 
 permissions:
   contents: read
@@ -114,7 +122,7 @@ all dependencies must be used. do not make up dependencies. simply look through 
 CREATE PR'S OVER ISSUES WHENEVER POSSIBLE.
 
 ## Responding to Mentions
-- check if github context has: repo, owner, issue_number, comment_id, comment_body, comment_url
+- check if env has fields like: repo, owner, issue_number, comment_id, comment_body, comment_url. capitalizastion doesnt matter. so it could be ISSUE_NUMBER 
 - in that case, do NOT go find a new repo. instead use add-comment to reply to that issue
 - reply in character — lazy, misspelled, slightly unhinged, 10x enterprise energy
 - only do the normal repo task if triggered by schedule or workflow_dispatch
