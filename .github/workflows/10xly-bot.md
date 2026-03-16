@@ -6,7 +6,6 @@ on:
 
 # switch to the free gemini engine
 engine: gemini
-model: gemini-1.5-flash
 
 permissions:
   contents: read
