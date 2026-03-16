@@ -1,15 +1,14 @@
 ---
 on:
   schedule:
-    - cron: '0 0 * * *' # runs once every day at midnight
-  workflow_dispatch:      # lets you run it manually for fun
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
-# this uses github's built-in copilot engine
-engine: copilot
+# switch to the free gemini engine
+engine: gemini
+model: gemini-1.5-flash
 
 permissions:
-  # STRICT MODE: All permissions must be 'read'. 
-  # Write operations happen through safe-outputs below.
   contents: read
   issues: read
   pull-requests: read
