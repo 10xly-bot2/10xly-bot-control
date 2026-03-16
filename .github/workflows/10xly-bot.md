@@ -4,7 +4,12 @@ on:
     - cron: '0 0 * * *'
   workflow_dispatch:
 
-engine: copilot
+engine:
+  id: gemini
+  version: "0.31.0"
+  args:
+    - "--model"
+    - "gemini-2.0-flash"
 
 permissions:
   contents: read
