@@ -4,8 +4,7 @@ on:
     - cron: '0 0 * * *'
   workflow_dispatch:
 
-# switch to the free gemini engine
-engine: gemini:gemini-1.5-flash
+engine: copilot
 
 permissions:
   contents: read
