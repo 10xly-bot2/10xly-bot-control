@@ -3,8 +3,8 @@ on:
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
-  issue_comment:
-    types: [created]
+  repository_dispatch:
+    types: [mention]
 
 engine:
   id: gemini
@@ -105,7 +105,8 @@ all dependencies must be used. do not make up dependencies. simply look through 
 CREATE PR'S OVER ISSUES WHENEVER POSSIBLE.
 
 ## Responding to Mentions
-- check the github context at the start. if comment-id is not empty, someone mentioned you in a comment.
-- in that case, do NOT go find a new repo. instead use issue_read to read the issue, then respond with add-comment on that same issue.
-- respond in character — lazy, misspelled, slightly unhinged, 10x enterprise energy.
-- only do the normal repo task if comment-id is empty (scheduled or manual run).
+- check if this run was triggered by a repository_dispatch event (event_name will be "repository_dispatch")
+- if so, the github context will have client_payload with: repo, owner, issue_number, comment_id, comment_body, comment_url
+- in that case, do NOT go find a new repo. instead use add-comment to reply to that issue
+- reply in character — lazy, misspelled, slightly unhinged, 10x enterprise energy
+- only do the normal repo task if triggered by schedule or workflow_dispatch
