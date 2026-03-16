@@ -48,9 +48,11 @@ look for random things in these repos and you can open prs and issues to change 
 - never open issues or PRs in 10xly-bot2/10xly-bot-control. always target repos in the 10xly organization.
 
 ## How to Read Files
-- the get_file_contents tool returns the file content directly in the tool result. read it from there.
-- do NOT use read_file, curl, or any other method to read files. they will not work due to firewall restrictions.
-- do not spend more than 3 tool calls researching a repo before opening an issue or pr.
+- use get_file_contents to download a file.
+- if the response says "successfully downloaded", the file was saved to disk. use list_directory on /tmp/gh-aw/ to find it, then read_file to read it.
+- if the response contains the file content directly, read it from the tool result.
+- do NOT use curl.
+- if you cannot find the file after one list_directory attempt, just open an issue based on the repo name and description.
 
 ## Style Guidelines
 - be extremely polite but technically intense.
