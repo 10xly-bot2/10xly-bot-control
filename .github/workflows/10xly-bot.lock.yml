@@ -22,16 +22,24 @@
 # For more information: https://github.github.com/gh-aw/introduction/overview/
 #
 #
-# gh-aw-metadata: {"schema_version":"v2","frontmatter_hash":"3c935ae98c3a27c7140fdadee4cfa3fc807150780d483bf1a2690de2da0c3241","compiler_version":"v0.58.3","strict":true}
+# gh-aw-metadata: {"schema_version":"v2","frontmatter_hash":"021ab2e4bc2f3536174372178fceb132f6bb3cd961bf30392128ef49670980f7","compiler_version":"v0.58.3","strict":true}
 
 name: "10xly-bot2 Personality & Mission"
 "on":
-  repository_dispatch:
-    types:
-    - mention
   schedule:
   - cron: "0 0 * * *"
   workflow_dispatch:
+    inputs:
+      comment_body:
+        description: Comment body
+      comment_id:
+        description: Comment ID that triggered this
+      issue_number:
+        description: Issue number to reply to
+      owner:
+        description: Repo owner
+      repo:
+        description: Repo name
 
 permissions: {}
 
@@ -42,8 +50,6 @@ run-name: "10xly-bot2 Personality & Mission"
 
 jobs:
   activation:
-    needs: pre_activation
-    if: needs.pre_activation.outputs.activated == 'true'
     runs-on: ubuntu-slim
     permissions:
       contents: read
@@ -192,7 +198,6 @@ jobs:
           GH_AW_GITHUB_REPOSITORY: ${{ github.repository }}
           GH_AW_GITHUB_RUN_ID: ${{ github.run_id }}
           GH_AW_GITHUB_WORKSPACE: ${{ github.workspace }}
-          GH_AW_NEEDS_PRE_ACTIVATION_OUTPUTS_ACTIVATED: ${{ needs.pre_activation.outputs.activated }}
         with:
           script: |
             const { setupGlobals } = require('/opt/gh-aw/actions/setup_globals.cjs');
@@ -211,8 +216,7 @@ jobs:
                 GH_AW_GITHUB_EVENT_PULL_REQUEST_NUMBER: process.env.GH_AW_GITHUB_EVENT_PULL_REQUEST_NUMBER,
                 GH_AW_GITHUB_REPOSITORY: process.env.GH_AW_GITHUB_REPOSITORY,
                 GH_AW_GITHUB_RUN_ID: process.env.GH_AW_GITHUB_RUN_ID,
-                GH_AW_GITHUB_WORKSPACE: process.env.GH_AW_GITHUB_WORKSPACE,
-                GH_AW_NEEDS_PRE_ACTIVATION_OUTPUTS_ACTIVATED: process.env.GH_AW_NEEDS_PRE_ACTIVATION_OUTPUTS_ACTIVATED
+                GH_AW_GITHUB_WORKSPACE: process.env.GH_AW_GITHUB_WORKSPACE
               }
             });
       - name: Validate prompt placeholders
@@ -1192,29 +1196,6 @@ jobs:
             const { setupGlobals } = require('/opt/gh-aw/actions/setup_globals.cjs');
             setupGlobals(core, github, context, exec, io);
             const { main } = require('/opt/gh-aw/actions/handle_create_pr_error.cjs');
-            await main();
-
-  pre_activation:
-    runs-on: ubuntu-slim
-    outputs:
-      activated: ${{ steps.check_membership.outputs.is_team_member == 'true' }}
-      matched_command: ''
-    steps:
-      - name: Setup Scripts
-        uses: github/gh-aw/actions/setup@08a903b1fb2e493a84a57577778fe5dd711f9468 # v0.58.3
-        with:
-          destination: /opt/gh-aw/actions
-      - name: Check team membership for workflow
-        id: check_membership
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
-        env:
-          GH_AW_REQUIRED_ROLES: admin,maintainer,write
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { setupGlobals } = require('/opt/gh-aw/actions/setup_globals.cjs');
-            setupGlobals(core, github, context, exec, io);
-            const { main } = require('/opt/gh-aw/actions/check_membership.cjs');
             await main();
 
   safe_outputs:

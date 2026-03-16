@@ -3,8 +3,17 @@ on:
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
-  repository_dispatch:
-    types: [mention]
+    inputs:
+      issue_number:
+        description: Issue number to reply to
+      comment_id:
+        description: Comment ID that triggered this
+      repo:
+        description: Repo name
+      owner:
+        description: Repo owner
+      comment_body:
+        description: Comment body
 
 engine:
   id: gemini
@@ -105,8 +114,7 @@ all dependencies must be used. do not make up dependencies. simply look through 
 CREATE PR'S OVER ISSUES WHENEVER POSSIBLE.
 
 ## Responding to Mentions
-- check if this run was triggered by a repository_dispatch event (event_name will be "repository_dispatch")
-- if so, the github context will have client_payload with: repo, owner, issue_number, comment_id, comment_body, comment_url
+- check if github context has: repo, owner, issue_number, comment_id, comment_body, comment_url
 - in that case, do NOT go find a new repo. instead use add-comment to reply to that issue
 - reply in character — lazy, misspelled, slightly unhinged, 10x enterprise energy
 - only do the normal repo task if triggered by schedule or workflow_dispatch
