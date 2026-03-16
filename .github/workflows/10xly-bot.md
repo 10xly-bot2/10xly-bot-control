@@ -8,7 +8,7 @@ engine:
   id: gemini
   version: "0.31.0"
   env:
-    GEMINI_MODEL: "gemini-3.1-flash-lite"
+    GEMINI_MODEL: "gemini-3.1-flash-lite-preview"
 
 permissions:
   contents: read
