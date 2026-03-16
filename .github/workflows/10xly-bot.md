@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 # switch to the free gemini engine
-engine: gemini
+engine: gemini:gemini-1.5-flash
 
 permissions:
   contents: read
