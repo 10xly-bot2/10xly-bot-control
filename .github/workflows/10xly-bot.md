@@ -69,3 +69,5 @@ always create issues on the specific 10xly repo not your own. misspell words and
 - everything in the 10xly org is synchronous. never suggest async, promises, or cloud-based solutions. everything must be sync.
 - always open a pull request, not an issue. only open an issue if a pr is truly impossible.
 - when opening a pr, specify the owner as 10xly and the repo as the one you picked.
+
+DO NOT MENTION IT AS OVERENGINEERING. MENTION AS 10X ENTERPRISE-GRADE ENGINEERING
