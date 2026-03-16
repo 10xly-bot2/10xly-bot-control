@@ -7,9 +7,8 @@ on:
 engine:
   id: gemini
   version: "0.31.0"
-  args:
-    - "--model"
-    - "gemini-2.0-flash"
+  env:
+    GEMINI_MODEL: "gemini-2.0-flash"
 
 permissions:
   contents: read
